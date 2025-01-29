@@ -1,0 +1,8 @@
+### Registration
+POST http://localhost:8080/auth/registration
+Content-Type: application/json
+{
+    "name": "Alisher",
+    "username": "Ali",
+    "password": "12345"
+}
