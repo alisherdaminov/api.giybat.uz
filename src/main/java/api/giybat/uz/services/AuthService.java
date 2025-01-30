@@ -60,7 +60,8 @@ public class AuthService {
     public String regVerification(Long profileId) {
         ProfileEntity profile = profileService.getById(profileId);
         if (profile.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
-            //ACTIVE - why- as user is fully registered and can log in, BLOCK - why - user is blocked by admin and then user cannot log in again
+            //ACTIVE - why- as user is fully registered and can log in,
+            // BLOCK - why - user is blocked by admin and then user cannot log in again
             profileRepository.changeStatus(profileId, GeneralStatus.ACTIVE);
             return "Successfully verified!";
         }
