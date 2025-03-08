@@ -11,6 +11,8 @@ import java.util.Optional;
 @Service
 public class ProfileService {
 
+
+    // ProfileService is used to get profile by id for email sending
     @Autowired
     private ProfileRepository profileRepository;
 

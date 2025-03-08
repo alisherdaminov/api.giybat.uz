@@ -58,6 +58,7 @@ public class SpringConfig {
         });
                 //.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.csrf(AbstractHttpConfigurer::disable);
+        // http.cors dan hohlagan domainlardan foydalanish mumkun degani
         http.cors(httpSecurityCorsConfigurer -> {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowedOriginPatterns(List.of("*"));

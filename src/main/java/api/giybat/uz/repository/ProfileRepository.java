@@ -19,6 +19,8 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
 
     Optional<ProfileEntity> findByIdAndVisibleTrue(Long id);
 
+
+    // update ProfileEntity set status =?2 where id = ?1. is user in registration or not
     @Transactional
     @Modifying
     @Query("update ProfileEntity set status =?2 where id = ?1")

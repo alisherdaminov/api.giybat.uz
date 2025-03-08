@@ -34,12 +34,13 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     // 400 error
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(AppBadException.class)
     public ResponseEntity<String> handle(AppBadException appBadException) {
         return ResponseEntity.badRequest().body(appBadException.getMessage());
     }
 
     // 500 error jonatish va controllerdan chiqb ketaolmaydi spring securitga
+    // biz bilmaydigan xatoliklar uchun RuntimeExceptionni handle qilamiz
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handle(RuntimeException runtimeException) {
         runtimeException.printStackTrace();

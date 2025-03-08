@@ -39,7 +39,7 @@ public class ProfileEntity {
 
     //User registered not fully, once we can make him visible or invisible
     @Column(name = "visible")
-    private Boolean visible = Boolean.TRUE;
+    private Boolean visible;
 
     @Column(name = "created_date")
     private LocalDateTime created_date;

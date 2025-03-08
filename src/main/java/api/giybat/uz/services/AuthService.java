@@ -29,7 +29,8 @@ public class AuthService {
 
     public String registrationService(RegistrationDTO dto) {
         Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
-        if (optional.isPresent()) {
+       // is there a user with this username(checking by username)
+        if (optional.isPresent()) { // if username already exists
             ProfileEntity profile = optional.get();
             if (profile.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
                 //1-usul o' chirib qayta royaxtga olish
@@ -40,10 +41,11 @@ public class AuthService {
                 throw new AppBadException("Username already exists");
             }
         }
+        // user creation - unless username already exists
         ProfileEntity profileEntity = new ProfileEntity();
         profileEntity.setName(dto.getName());
         profileEntity.setUsername(dto.getUsername());
-        profileEntity.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+        profileEntity.setPassword(bCryptPasswordEncoder.encode(dto.getPassword())); // TODO
         profileEntity.setStatus(GeneralStatus.IN_REGISTRATION);     // user is not fully registered
         profileEntity.setVisible(true);
         profileEntity.setCreated_date(LocalDateTime.now());
