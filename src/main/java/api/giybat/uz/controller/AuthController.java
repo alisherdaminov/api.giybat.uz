@@ -1,12 +1,12 @@
 package api.giybat.uz.controller;
 
+import api.giybat.uz.dto.AuthDto;
+import api.giybat.uz.dto.ProfileDTO;
 import api.giybat.uz.dto.RegistrationDTO;
 import api.giybat.uz.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,17 +21,15 @@ public class AuthController {
         return ResponseEntity.ok().body(authService.registrationService(dto));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<ProfileDTO> login(@Valid @RequestBody AuthDto dto) {
+        return ResponseEntity.ok().body(authService.login(dto));
+    }
+
     @GetMapping("/registration/verification/{profileId}")
     public ResponseEntity<String> regVerification(@PathVariable("profileId") Long profileId) {
         return ResponseEntity.ok().body(authService.regVerification(profileId));
     }
 
-//    @PostMapping("/signin")
-//    public ResponseEntity<?> signIn(@RequestBody User user) {
-//        User dbUser = userRepository.findByUsername(user.getUsername());
-//        if (dbUser != null && new BCryptPasswordEncoder().matches(user.getPassword(), dbUser.getPassword())) {
-//            return ResponseEntity.ok(jwtUtil.generateToken(user.getUsername()));
-//        }
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-//    }
+
 }

@@ -15,8 +15,6 @@ import java.util.*;
 
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
-
-
     // This method is used to handle validation errors
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {

@@ -1,5 +1,6 @@
 package api.giybat.uz.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,21 +28,14 @@ import java.util.UUID;
 @EnableWebSecurity
 public class SpringConfig {
 
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        // authentication - identification of user
-        // mainly is there a user with this username and password
-        String password = UUID.randomUUID().toString();
-        System.out.println("User Password Mazgi: " + password);
-
-        UserDetails user = User.builder()
-                .username("user")
-                .password("{noop}" + password)
-                .roles("USER")
-                .build();
-
+    public AuthenticationProvider authenticationProvider(BCryptPasswordEncoder bCryptPasswordEncoder) {
         final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(new InMemoryUserDetailsManager(user));
+        authenticationProvider.setUserDetailsService(customUserDetailsService);
+        authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return authenticationProvider;
     }
 

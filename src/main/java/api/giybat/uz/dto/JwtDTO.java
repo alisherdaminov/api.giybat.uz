@@ -1,6 +1,7 @@
 package api.giybat.uz.dto;
 
 import api.giybat.uz.enums.ProfileRoleEnum;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,13 +9,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProfileDTO {
+@AllArgsConstructor
+public class JwtDTO {
 
-    private Long id;
-    private String name;
-    private String username;
+    private Integer id;
     private List<ProfileRoleEnum> rolesList;
-    private String jwt;
 }
-
-
