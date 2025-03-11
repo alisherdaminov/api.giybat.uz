@@ -1,9 +1,11 @@
 package api.giybat.uz.services;
 
+import api.giybat.uz.dto.AppResponse;
 import api.giybat.uz.dto.AuthDto;
 import api.giybat.uz.dto.ProfileDTO;
 import api.giybat.uz.dto.RegistrationDTO;
 import api.giybat.uz.entity.ProfileEntity;
+import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.GeneralStatus;
 import api.giybat.uz.enums.ProfileRoleEnum;
 import api.giybat.uz.exceptions.AppBadException;
@@ -11,11 +13,15 @@ import api.giybat.uz.repository.ProfileRepository;
 import api.giybat.uz.repository.ProfileRoleRepository;
 import api.giybat.uz.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 
 @Service
@@ -32,8 +38,10 @@ public class AuthService {
     private ProfileService profileService;
     @Autowired
     private ProfileRoleRepository profileRoleRepository;
+    @Autowired
+    private ResourceBundleService resourceBundleService;
 
-    public String registrationService(RegistrationDTO dto) {
+    public AppResponse<String> registrationService(RegistrationDTO dto, AppLanguage appLanguage) {
         Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         // is there a user with this username(checking by username)
         if (optional.isPresent()) { // if username already exists
@@ -44,7 +52,7 @@ public class AuthService {
                 profileRepository.delete(profile); // profile is deleted
                 //2-usul send email&sms
             } else {
-                throw new AppBadException("Username already exists");
+                throw new AppBadException(resourceBundleService.getMessage("email.phone.exists", appLanguage));
             }
         }
         // user creation - unless username already exists
@@ -60,36 +68,39 @@ public class AuthService {
         // user role is set up
         profileRoleService.createRole(profileEntity.getId(), ProfileRoleEnum.ROLE_USER);
         // send email
-        emailSendingService.sendRegistrationEmail(dto.getUsername(), profileEntity.getId());
-        return "Successfully registered!";
+      //  emailSendingService.sendRegistrationEmail(dto.getUsername(), profileEntity.getId());
+
+        // bu threadda ishlata olamiz va ishlash tezligini oshirish uchun. yani alohida oqimda ishlash uchun
+        CompletableFuture.runAsync(() -> emailSendingService.sendRegistrationEmail(dto.getUsername(), profileEntity.getId()));
+        return new AppResponse<>(resourceBundleService.getMessage("registration.success", appLanguage));
     }
 
 
-    public String regVerification(Long profileId) {
+    public String regVerification(Long profileId, AppLanguage appLanguage) {
         ProfileEntity profile = profileService.getById(profileId);
         if (profile.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
             //ACTIVE - why- as user is fully registered and can log in,
             // BLOCK - why - user is blocked by admin and then user cannot log in again
             profileRepository.changeStatus(profileId, GeneralStatus.ACTIVE);
-            return "Successfully verified!";
+            return resourceBundleService.getMessage("successfully.verified", appLanguage);
         }
-        throw new AppBadException("Verification failed");
+        throw new AppBadException(resourceBundleService.getMessage("verification.failed", appLanguage));
     }
 
 
-    public ProfileDTO login(AuthDto dto) {
+    public ProfileDTO login(AuthDto dto,AppLanguage appLanguage) {
         Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         // Checking all conditions
         /// //////////////////////////////////////
         if (optional.isEmpty()) {
             //400 - bad request
-            throw new AppBadException("Username or password is incorrect");
+            throw new AppBadException(resourceBundleService.getMessage("user.not.found", appLanguage));
         }
         /// //////////////////////////////////////
         ProfileEntity profile = optional.get();
         if (!bCryptPasswordEncoder.matches(dto.getPassword(), profile.getPassword())) {
             //400 - bad request
-            throw new AppBadException("Username or password is incorrect");
+            throw new AppBadException(resourceBundleService.getMessage("user.not.found", appLanguage));
         }
         /// //////////////////////////////////////
 //        if (!optional.get().getStatus().equals(GeneralStatus.ACTIVE)) {
@@ -103,7 +114,7 @@ public class AuthService {
         response.setName(profile.getName());// name set
         response.setUsername(profile.getUsername());// username set
         response.setRolesList(profileRoleRepository.findAllRolesByProfileId(profile.getId())); // roles set
-        response.setJwt(JwtUtil.encode(profile.getId(), response.getRolesList()));// token is created
+        response.setJwt(JwtUtil.encode(profile.getUsername(),profile.getId(), response.getRolesList()));// token is created
         return response;
     }
 }

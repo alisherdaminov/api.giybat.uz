@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class JwtDTO {
-
+    private String username;
     private Integer id;
     private List<ProfileRoleEnum> rolesList;
 }

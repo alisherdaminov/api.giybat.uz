@@ -1,7 +1,6 @@
 package api.giybat.uz.util;
 
 import api.giybat.uz.dto.JwtDTO;
-import api.giybat.uz.entity.ProfileRoleEntity;
 import api.giybat.uz.enums.ProfileRoleEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,18 +13,19 @@ import java.util.stream.Collectors;
 
 public class JwtUtil {
     private static final int tokenLiveTime = 1000 * 3600 * 24; // 1-day
-    private static final String secretKey = "veryLongSecretmazgillattayevlasharaaxmojonjinnijonsurbetbekkiydirhonuxlatdibekloxovdangasabekochkozjonduxovmashaynikmaydagapchishularnioqiganbolsangizgapyoqaniqsizmazgi";
+    private static final String secretKey = "veryLongSecretmazgillattayevlasharaaxmojonjinnijonsurbetbekkiydirhonuxlatdibekloxovdangasabekochkozjonduxovmashaynikmaydagapchishularnioqiganbolsangizgapyoqaniqsizmazgiveryLongSecretmazgillattayevlasharaaxmojonjinnijonsurbetbekkiydirhonuxlatdibekloxovdangasabekochkozjonduxovmashaynikmaydagapchishularnioqiganbolsangizgapyoqaniqsizmazgiveryLongSecretmazgillattayevlasharaaxmojonjinnijonsurbetbekkiydirhonuxlatdibekloxovdangasabekochkozjonduxovmashaynikmaydagapchishularnioqiganbolsangizgapyoqaniqsizmazgi";
 
-    public static String encode(Long id, List<ProfileRoleEnum> roleEnumList) {
+    public static String encode(String username, Long id, List<ProfileRoleEnum> roleEnumList) {
         // List<ProfileRoleEnum> rolelar kop bolgani un bitta stringga o'zgartiriladi vergul orqali roles ajratilib qabul qilinadi
         String strEnumList = roleEnumList.stream().map(Enum::name).collect(Collectors.joining(","));
         Map<String, String> extraClaims = new HashMap<>();
         extraClaims.put("roles", strEnumList);
+        extraClaims.put("id", String.valueOf(id));
 
         return Jwts
                 .builder()
                 .claims(extraClaims)
-                .subject(String.valueOf(id))
+                .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + tokenLiveTime))
                 .signWith(getSignInKey())
@@ -40,21 +40,17 @@ public class JwtUtil {
                 .parseSignedClaims(token)
                 .getPayload();
 
-        Integer id = Integer.valueOf(claims.getSubject());
+        String username = claims.getSubject();
+        Integer id = Integer.valueOf((String) claims.get("id"));
         String strRole = (String) claims.get("roles");
         List<ProfileRoleEnum> roleEnumList = Arrays.stream(strRole.split(",")).map(ProfileRoleEnum::valueOf).toList();
-        return new JwtDTO(id, roleEnumList);
+        return new JwtDTO(username, id, roleEnumList);
     }
 
 
-    public static String encode(Long id) {
-//        Map<String, Object> extraClaims = new HashMap<>();
-//        extraClaims.put("username", username);
-//        extraClaims.put("role", role);
-
+    public static String encodeVerificationSMS(Long id) {
         return Jwts
                 .builder()
-                // .claims(extraClaims)
                 .subject(String.valueOf(id))
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + (60 * 60 * 1000)))
@@ -62,17 +58,15 @@ public class JwtUtil {
                 .compact();
     }
 
-//    public static JwtDTO decode(String token) {
-//        Claims claims = Jwts
-//                .parser()
-//                .verifyWith(getSignInKey())
-//                .build()
-//                .parseSignedClaims(token)
-//                .getPayload();
-//        String username = (String) claims.get("username");
-//        String role = (String) claims.get("role");
-//        return new JwtDTO(username, role);
-//    }
+    public static Integer decodeVerificationSMS(String token) {
+        Claims claims = Jwts
+                .parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return Integer.valueOf(claims.getSubject());
+    }
 
     private static SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
