@@ -20,19 +20,19 @@ public class AuthController {
 
     @PostMapping("/registration")
     public ResponseEntity<AppResponse<String>> registration(@Valid @RequestBody RegistrationDTO dto,
-                                                            @RequestHeader("Accept-Language") AppLanguage language) {
+                                                            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ResponseEntity.ok().body(authService.registrationService(dto, language));
     }
 
     @PostMapping("/login")
     public ResponseEntity<ProfileDTO> login(@Valid @RequestBody AuthDto dto,
-                                            @RequestHeader("Accept-Language") AppLanguage language) {
+                                            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ResponseEntity.ok().body(authService.login(dto, language));
     }
 
     @GetMapping("/registration/verification/{profileId}")
     public ResponseEntity<String> regVerification(@PathVariable("profileId") Long profileId,
-                                                  @RequestHeader("Accept-Language") AppLanguage language) {
+                                                  @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ResponseEntity.ok().body(authService.regVerification(profileId, language));
     }
 
