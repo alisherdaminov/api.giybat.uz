@@ -17,12 +17,18 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
     // select * from ProfileEntity where username =? and visible = true;
     Optional<ProfileEntity> findByUsernameAndVisibleTrue(String username);
 
-    Optional<ProfileEntity> findByIdAndVisibleTrue(Long id);
+    Optional<ProfileEntity> findByIdAndVisibleTrue(Integer id);
 
 
     // update ProfileEntity set status =?2 where id = ?1. is user in registration or not
     @Transactional
     @Modifying
     @Query("update ProfileEntity set status =?2 where id = ?1")
-    void changeStatus(Long id, GeneralStatus status);
+    void changeStatus(Integer id, GeneralStatus status);
+
+    // update ProfileEntity set password =?2 where id = ?1. is user update reset password
+    @Transactional
+    @Modifying
+    @Query("update ProfileEntity set password =?2 where id = ?1")
+    void updatePassword(Integer id, String password);
 }

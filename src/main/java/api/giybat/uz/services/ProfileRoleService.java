@@ -17,7 +17,7 @@ public class ProfileRoleService {
     @Autowired
     private ProfileRoleRepository profileRoleRepository;
 
-    public void createRole(Long profileId, ProfileRoleEnum profileRole) {
+    public void createRole(Integer profileId, ProfileRoleEnum profileRole) {
         ProfileRoleEntity entity = new ProfileRoleEntity();
         entity.setProfileId(profileId);
         entity.setRoles(profileRole);
@@ -25,7 +25,7 @@ public class ProfileRoleService {
         profileRoleRepository.save(entity);
     }
 
-    public void deleteRole(Long profileId) {
+    public void deleteRole(Integer profileId) {
         profileRoleRepository.deleteByProfileId(profileId);
     }
 }

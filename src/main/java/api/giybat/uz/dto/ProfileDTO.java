@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 public class ProfileDTO {
 
-    private Long id;
+    private Integer id;
     private String name;
     private String username;
     private List<ProfileRoleEnum> rolesList;

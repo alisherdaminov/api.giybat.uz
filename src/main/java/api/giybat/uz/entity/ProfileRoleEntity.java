@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 public class ProfileRoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "profile_id")
-    private Long profileId;
+    private Integer profileId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", insertable = false, updatable = false)

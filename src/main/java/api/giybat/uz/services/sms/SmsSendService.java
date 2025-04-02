@@ -5,9 +5,12 @@ import api.giybat.uz.dto.sms.SmsAuthResponseDTO;
 import api.giybat.uz.dto.sms.SmsRequestDTO;
 import api.giybat.uz.dto.sms.SmsSendResponseDTO;
 import api.giybat.uz.entity.SmsProviderTokenHolderEntity;
+import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.SmsType;
 import api.giybat.uz.exceptions.AppBadException;
-import api.giybat.uz.repository.SmsProviderTokenHolderRepository;
+import api.giybat.uz.repository.sms.SmsProviderTokenHolderRepository;
+import api.giybat.uz.services.ResourceBundleService;
+import api.giybat.uz.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -35,22 +38,40 @@ public class SmsSendService {
     private SmsProviderTokenHolderRepository smsProviderTokenHolderRepository;
     @Autowired
     private SmsHistoryService smsHistoryService;
+    @Autowired
+    private ResourceBundleService resourceBundleService;
 
 
-    public SmsSendResponseDTO sendSms(String phoneNumber, String message, String code, SmsType smsType) {
+    public void sendRegistrationSms(String phoneNumber) {
+        String code = RandomUtil.generateRandomNumber();
+        String message = "Giybat.uz da ro'yxatdan o'tdingiz. Kod: %s";
+        message = String.format(message, code);
+        sendSms(phoneNumber, message, code, SmsType.REGISTRATION);
+    }
+
+    public void sendResetPassword(String phoneNumber, AppLanguage language) {
+        String code = RandomUtil.generateRandomNumber();
+        String message = resourceBundleService.getMessage("reset.password.message", language);
+        message = String.format(message, code);
+        sendSms(phoneNumber, message, code, SmsType.RESET_PASSWORD);
+    }
+
+    private SmsSendResponseDTO sendSms(String phoneNumber, String message, String code, SmsType smsType) {
         // check
-        Long smsCount = smsHistoryService.getSmsCount(phoneNumber);
-        Integer smsLimit = 3;
-        if (smsCount >= smsLimit) {
+        Long smsCount = smsHistoryService.getPhoneNumberSmsCount(phoneNumber);
+        Integer maxSms = 3;
+        if (smsCount >= maxSms) {
             System.out.println("---- OverAll sms count: " + smsCount + " reached sms limit to this phone number: " + phoneNumber + "----");
             throw new AppBadException("Sms count limit reached");
         }
+        // SEND
         SmsSendResponseDTO result = sendSms(phoneNumber, message);
-        smsHistoryService.create(phoneNumber, message, code, smsType);
+        // SAVE
+        smsHistoryService.createPhoneNumberSms(phoneNumber, message, code, smsType);
         return result;
     }
 
-    public SmsSendResponseDTO sendSms(String phoneNumber, String message) {
+    private SmsSendResponseDTO sendSms(String phoneNumber, String message) {
         //get token
         String token = getToken();
         // headers
@@ -80,7 +101,7 @@ public class SmsSendService {
 
     }
 
-    public String getToken() {
+    private String getToken() {
         Optional<SmsProviderTokenHolderEntity> optional = smsProviderTokenHolderRepository.findTop1By();
         // agar token bolmasa optional.isEmpty() da, tokenni olib olsin bu shartda
         if (optional.isEmpty()) { // if token not found
@@ -107,7 +128,7 @@ public class SmsSendService {
         return token;
     }
 
-    public String getTokenFromProvider() {
+    private String getTokenFromProvider() {
         SmsAuthDTO smsAuthDTO = new SmsAuthDTO();
         smsAuthDTO.setEmail(accountLogin);
         smsAuthDTO.setPassword(accountPassword);

@@ -1,5 +1,6 @@
 package api.giybat.uz.entity;
 
+import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.GeneralStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class ProfileEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name = "name")
     private String name;
     @Column(name = "username")

@@ -1,4 +1,4 @@
-package api.giybat.uz.repository;
+package api.giybat.uz.repository.sms;
 
 import api.giybat.uz.entity.SmsProviderTokenHolderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

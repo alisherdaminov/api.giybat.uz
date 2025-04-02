@@ -1,4 +1,4 @@
-package api.giybat.uz.dto;
+package api.giybat.uz.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

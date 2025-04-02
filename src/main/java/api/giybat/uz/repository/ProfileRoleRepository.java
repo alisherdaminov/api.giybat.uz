@@ -14,7 +14,7 @@ public interface ProfileRoleRepository extends JpaRepository<ProfileRoleEntity, 
 
     @Transactional
     @Modifying
-    void deleteByProfileId(Long profileId);
+    void deleteByProfileId(Integer profileId);
 
 
 
@@ -23,5 +23,5 @@ public interface ProfileRoleRepository extends JpaRepository<ProfileRoleEntity, 
     // aynan bizga kerakli roli oladi, u class da boshqa fieldlarni ajratib olilishim shart emas
 
     @Query("select p.roles From ProfileRoleEntity p where p.profileId = ?1")
-    List<ProfileRoleEnum> findAllRolesByProfileId(Long profileId);
+    List<ProfileRoleEnum> findAllRolesByProfileId(Integer profileId);
 }

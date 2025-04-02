@@ -13,7 +13,7 @@ public class SpringSecurityUtil {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return userDetails;
     }
-    public static Long getCurrentUserId() {
+    public static Integer getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return userDetails.getId();

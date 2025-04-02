@@ -15,7 +15,7 @@ public class JwtUtil {
     private static final int tokenLiveTime = 1000 * 3600 * 24; // 1-day
     private static final String secretKey = "veryLongSecretmazgillattayevlasharaaxmojonjinnijonsurbetbekkiydirhonuxlatdibekloxovdangasabekochkozjonduxovmashaynikmaydagapchishularnioqiganbolsangizgapyoqaniqsizmazgiveryLongSecretmazgillattayevlasharaaxmojonjinnijonsurbetbekkiydirhonuxlatdibekloxovdangasabekochkozjonduxovmashaynikmaydagapchishularnioqiganbolsangizgapyoqaniqsizmazgiveryLongSecretmazgillattayevlasharaaxmojonjinnijonsurbetbekkiydirhonuxlatdibekloxovdangasabekochkozjonduxovmashaynikmaydagapchishularnioqiganbolsangizgapyoqaniqsizmazgi";
 
-    public static String encode(String username, Long id, List<ProfileRoleEnum> roleEnumList) {
+    public static String encode(String username, Integer id, List<ProfileRoleEnum> roleEnumList) {
         // List<ProfileRoleEnum> rolelar kop bolgani un bitta stringga o'zgartiriladi vergul orqali roles ajratilib qabul qilinadi
         String strEnumList = roleEnumList.stream().map(Enum::name).collect(Collectors.joining(","));
         Map<String, String> extraClaims = new HashMap<>();
@@ -48,7 +48,7 @@ public class JwtUtil {
     }
 
 
-    public static String encodeVerificationSMS(Long id) {
+    public static String encodeVerificationSMS(Integer id) {
         return Jwts
                 .builder()
                 .subject(String.valueOf(id))
@@ -58,7 +58,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static Integer decodeVerificationSMS(String token) {
+    public static Integer decodeVerificationToken(String token) {
         Claims claims = Jwts
                 .parser()
                 .verifyWith(getSignInKey())

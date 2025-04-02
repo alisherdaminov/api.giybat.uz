@@ -18,7 +18,7 @@ public class CustomUserDetails implements UserDetails {
     // keynchalik nimadir narsa kk bolsa biz shu joyga qoshib boramiz
     //CustomUserDetailsService classiga CustomUserDetailsni qoshamiz
 
-    private Long id;
+    private Integer id;
     private String name;
     private String username;
     private String password;
@@ -85,11 +85,11 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

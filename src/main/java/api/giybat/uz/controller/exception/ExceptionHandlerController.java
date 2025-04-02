@@ -1,4 +1,4 @@
-package api.giybat.uz.controller;
+package api.giybat.uz.controller.exception;
 
 import api.giybat.uz.exceptions.AppBadException;
 import org.springframework.http.HttpHeaders;

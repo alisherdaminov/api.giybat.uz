@@ -10,21 +10,19 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "sms_history")
-public class SmsHistoryEntity {
+@Table(name = "email_history")
+public class EmailHistoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(name = "phone_number")
-    private String phoneNumber;
-    @Column(name = "message", columnDefinition = "text")
-    private String message;
+    @Column(name = "email")
+    private String email;
     @Column(name = "code")
     private String code;
     @Enumerated(EnumType.STRING)
-    @Column(name = "smsType_status")
-    private SmsType smsTypeStatus;
+    @Column(name = "emailType_status")
+    private SmsType emailTypeStatus;
     @Column(name = "created_date")
     private LocalDateTime createdDate;
     @Column(name = "attempt_count")
