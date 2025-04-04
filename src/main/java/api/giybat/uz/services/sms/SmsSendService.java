@@ -56,6 +56,13 @@ public class SmsSendService {
         sendSms(phoneNumber, message, code, SmsType.RESET_PASSWORD);
     }
 
+    public void sendPhoneUsernameChangeConfirmationSms(String phoneNumber, AppLanguage language) {
+        String code = RandomUtil.generateRandomNumber();
+        String message = resourceBundleService.getMessage("sms.code.username.change", language);
+        message = String.format(message, code);
+        sendSms(phoneNumber, message, code, SmsType.USERNAME_UPDATE);
+    }
+
     private SmsSendResponseDTO sendSms(String phoneNumber, String message, String code, SmsType smsType) {
         // check
         Long smsCount = smsHistoryService.getPhoneNumberSmsCount(phoneNumber);

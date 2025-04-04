@@ -48,6 +48,14 @@ public class EmailSendingService {
         checkAndSendMimeEmail(email, subject, body, code, language);
     }
 
+    public void sendUsernameChangeEmail(String email, AppLanguage language) {
+        // generate code
+        String code = RandomUtil.generateRandomNumber();
+        String subject = "Username update Confirmation code: %s";
+        String body = "This is your username update code: " + code;
+        checkAndSendMimeEmail(email, subject, body, code, language);
+    }
+
     public void checkAndSendMimeEmail(String email, String subject, String body, String code, AppLanguage language) {
         // check
         Long emailSmsCount = emailHistoryService.getEmailSmsCount(email);

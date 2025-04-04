@@ -17,7 +17,6 @@ import api.giybat.uz.repository.ProfileRepository;
 import api.giybat.uz.repository.ProfileRoleRepository;
 import api.giybat.uz.services.email.EmailHistoryService;
 import api.giybat.uz.services.email.EmailSendingService;
-import api.giybat.uz.services.email.ProfileService;
 import api.giybat.uz.services.sms.SmsHistoryService;
 import api.giybat.uz.services.sms.SmsSendService;
 import api.giybat.uz.util.EmailUtil;
