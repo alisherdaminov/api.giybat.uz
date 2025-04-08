@@ -17,6 +17,7 @@ import api.giybat.uz.repository.ProfileRepository;
 import api.giybat.uz.repository.ProfileRoleRepository;
 import api.giybat.uz.services.email.EmailHistoryService;
 import api.giybat.uz.services.email.EmailSendingService;
+import api.giybat.uz.services.image.AttachService;
 import api.giybat.uz.services.sms.SmsHistoryService;
 import api.giybat.uz.services.sms.SmsSendService;
 import api.giybat.uz.util.EmailUtil;
@@ -54,6 +55,8 @@ public class AuthService {
     private SmsHistoryService smsHistoryService;
     @Autowired
     private EmailHistoryService emailHistoryService;
+    @Autowired
+    private AttachService attachService;
 
     public AppResponse<String> registrationService(RegistrationDTO dto, AppLanguage appLanguage) {
         Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
@@ -209,6 +212,7 @@ public class AuthService {
         response.setName(profile.getName());// name set
         response.setUsername(profile.getUsername());// username set
         response.setRolesList(profileRoleRepository.findAllRolesByProfileId(profile.getId())); // roles set
+        response.setAttachDTO(attachService.attachDTO(profile.getPhotoId()));
         response.setJwt(JwtUtil.encode(profile.getUsername(), profile.getId(), response.getRolesList()));// token is created
         return response;
     }

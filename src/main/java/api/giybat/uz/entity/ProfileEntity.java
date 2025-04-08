@@ -27,6 +27,14 @@ public class ProfileEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "photo_id")
+    private String photoId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attach_id", insertable = false, updatable = false)
+    private AttachEntity attachEntity;
+
+
     // User - ACTIVE,BLOCK
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

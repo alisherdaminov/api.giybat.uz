@@ -1,5 +1,6 @@
 package api.giybat.uz.dto;
 
+import api.giybat.uz.dto.profile.image.AttachDTO;
 import api.giybat.uz.enums.ProfileRoleEnum;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ public class ProfileDTO {
     private String username;
     private List<ProfileRoleEnum> rolesList;
     private String jwt;
+    private AttachDTO attachDTO;
 }
 
 

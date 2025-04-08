@@ -27,7 +27,12 @@ public class SpringConfig {
 
     // AUTH_WHITELIST KERAK sababi hamma api lar ochiq va qayta tekshirish shart emas
     public static final String[] AUTH_WHITELIST = {
-            "/auth/**"
+            "/auth/**",
+            "/profile/**",
+            "/attach/**",
+            "/swagger-ui/**",
+            "/v3/api-docs",
+            "/v3/api-docs/**"
     };
 
     @Bean

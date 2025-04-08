@@ -1,23 +1,32 @@
 package api.giybat.uz.services;
 
 import api.giybat.uz.dto.AppResponse;
+import api.giybat.uz.dto.CodeConfirmDTO;
 import api.giybat.uz.dto.profile.ProfileDetailUpdateDTO;
 import api.giybat.uz.dto.profile.ProfilePasswordUpdateDTO;
 import api.giybat.uz.dto.profile.ProfileUsernameUpdateDTO;
 import api.giybat.uz.entity.ProfileEntity;
 import api.giybat.uz.enums.AppLanguage;
+import api.giybat.uz.enums.ProfileRoleEnum;
 import api.giybat.uz.exceptions.AppBadException;
 import api.giybat.uz.repository.ProfileRepository;
+import api.giybat.uz.repository.ProfileRoleRepository;
+import api.giybat.uz.services.email.EmailHistoryService;
 import api.giybat.uz.services.email.EmailSendingService;
+import api.giybat.uz.services.image.AttachService;
+import api.giybat.uz.services.sms.SmsHistoryService;
 import api.giybat.uz.services.sms.SmsSendService;
 import api.giybat.uz.util.EmailUtil;
+import api.giybat.uz.util.JwtUtil;
 import api.giybat.uz.util.PhoneUtil;
 import api.giybat.uz.util.SpringSecurityUtil;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +42,14 @@ public class ProfileService {
     private SmsSendService smsSendService;
     @Autowired
     private EmailSendingService emailSendingService;
+    @Autowired
+    private SmsHistoryService smsHistoryService;
+    @Autowired
+    private EmailHistoryService emailHistoryService;
+    @Autowired
+    private ProfileRoleRepository profileRoleRepository;
+    @Autowired
+    private AttachService attachService;
 
     public ProfileEntity getById(Integer id) {
         return profileRepository.findByIdAndVisibleTrue(id).orElseThrow(() -> new AppBadException("Profile not found"));
@@ -72,5 +89,35 @@ public class ProfileService {
         //responseMessage for sms and email code shows once sms and email is received
         String responseMessage = resourceBundleService.getMessage("username.update.message", language);
         return new AppResponse<>(String.format(responseMessage, profileUsernameUpdateDTO.getUsername()));
+    }
+
+    public AppResponse<String> updateUsernameConfirm(CodeConfirmDTO codeConfirmDTO, AppLanguage language) {
+        Integer userId = SpringSecurityUtil.getCurrentUserId();
+        ProfileEntity profileId = getById(userId);
+        String tempUsername = profileId.getTempUsername();
+        //code check
+        if (PhoneUtil.isValidPhoneNumber(tempUsername)) {
+            smsHistoryService.checkPhoneNumberSmsCode(tempUsername, codeConfirmDTO.getCode(), language);
+        } else if (EmailUtil.isValidEmail(tempUsername)) {
+            emailHistoryService.checkEmailSmsCode(tempUsername, codeConfirmDTO.getCode(), language);
+        }
+        profileRepository.updateUsername(userId, tempUsername);
+
+        List<ProfileRoleEnum> roleEnums = profileRoleRepository.findAllRolesByProfileId(userId);
+        // Token has to be resent to front end for reuse successfully user's data
+        String jwt = JwtUtil.encode(tempUsername, profileId.getId(), roleEnums);
+        return new AppResponse<>(jwt, resourceBundleService.getMessage("username.successfully.changed", language));
+    }
+
+    public AppResponse<String> updatePhoto(String photoId, AppLanguage language) {
+        Integer userId = SpringSecurityUtil.getCurrentUserId();
+        ProfileEntity profile = getById(userId);
+        profileRepository.updatePhoto(userId, photoId);// update new photo
+
+        // old photo what to do ...?
+        if (profile.getPhotoId() != null && !profile.getPhotoId().equals(photoId)) {
+            attachService.updatePhoto(profile.getPhotoId());// update old photo
+        }
+        return new AppResponse<>(resourceBundleService.getMessage("profile.photo.updated.successfully", language));
     }
 }
