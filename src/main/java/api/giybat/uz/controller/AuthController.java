@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "AuthController", description = "Api's for authorization and authentication")
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -32,6 +34,7 @@ public class AuthController {
     @Operation(summary = "Registration", description = "Registration for user", tags = {"Registration"} )
     public ResponseEntity<AppResponse<String>> registration(@Valid @RequestBody RegistrationDTO dto,
                                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+      log.info("Registration");
         return ResponseEntity.ok().body(authService.registrationService(dto, language));
     }
 
@@ -43,6 +46,7 @@ public class AuthController {
                                                                 //once got email verification link error->   // @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
                                                                 @RequestParam("language") AppLanguage language
     ) {
+        log.info("Registration-Email-Verification");
         return ResponseEntity.ok().body(authService.registrationEmailVerification(token, language));
     }
 
@@ -52,6 +56,7 @@ public class AuthController {
     @Operation(summary = "registrationSmsVerification", description = "registration Email Verification for user" )
     public ResponseEntity<ProfileDTO> registrationSmsVerification(@Valid @RequestBody SmsVerificationDTO dto,
                                                                   @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+       log.info("Registration-Sms-Verification");
         return ResponseEntity.ok().body(authService.registrationSmsVerification(dto, language));
     }
 
@@ -61,6 +66,7 @@ public class AuthController {
     @Operation(summary = "registrationSmsVerificationResend", description = "registration Email Verification for user" )
     public ResponseEntity<AppResponse<String>> registrationSmsVerificationResend(@Valid @RequestBody SmsResendDTO dto,
                                                                                  @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        log.info("Registration-Sms-Verification-Resend");
         return ResponseEntity.ok().body(authService.registrationSmsVerificationResend(dto, language));
     }
 
@@ -70,6 +76,7 @@ public class AuthController {
     @Operation(summary = "login", description = "registration Email Verification for user" )
     public ResponseEntity<ProfileDTO> login(@Valid @RequestBody AuthDto dto,
                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+       log.info("Login: {}", dto.getUsername());
         return ResponseEntity.ok().body(authService.login(dto, language));
     }
 
@@ -80,6 +87,7 @@ public class AuthController {
     @Operation(summary = "resetPassword", description = "registration Email Verification for user" )
     public ResponseEntity<AppResponse<String>> resetPassword(@Valid @RequestBody ResetPasswordDTO dto,
                                                              @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+       log.info("Reset-Password: {}", dto.getUsername());
         return ResponseEntity.ok().body(authService.resetPassword(dto, language));
     }
 

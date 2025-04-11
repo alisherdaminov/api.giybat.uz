@@ -32,7 +32,10 @@ public class SpringConfig {
             "/attach/**",
             "/swagger-ui/**",
             "/v3/api-docs",
-            "/v3/api-docs/**"
+            "/v3/api-docs/**",
+            "/post/get-profile-post-by-id/**"
+
+
     };
 
     @Bean
