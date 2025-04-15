@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PostFilter {
+public class PostPublicFilterDTO {
 
     private String query;
 }

@@ -28,7 +28,7 @@ public class ProfileRoleEntity {
     private ProfileRoleEnum roles;
 
     @Column(name = "created_date")
-    private LocalDateTime created_date;
+    private LocalDateTime createdDate;
 
 
 }

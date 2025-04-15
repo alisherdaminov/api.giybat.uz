@@ -1,6 +1,5 @@
 package api.giybat.uz.entity;
 
-import api.giybat.uz.enums.SmsType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +19,7 @@ public class AttachEntity {
     @Column(name = "extension")
     private String extension;
     @Column(name = "origen_name")
-    private String origenName;
+    private String originalName;
     @Column(name = "size")
     private Long size;
     @Column(name = "created_date")

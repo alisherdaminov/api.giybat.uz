@@ -1,5 +1,6 @@
 package api.giybat.uz.entity;
 
+import api.giybat.uz.enums.GeneralStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class PostEntity {
 
     @Column(name = "profile_id", nullable = false)
     private Integer profileId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     private ProfileEntity profileEntity;
@@ -39,6 +41,10 @@ public class PostEntity {
 
     @Column(name = "visible")
     private Boolean visible = true;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private GeneralStatus status;
 
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();

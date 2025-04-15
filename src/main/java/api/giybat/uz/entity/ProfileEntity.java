@@ -1,6 +1,5 @@
 package api.giybat.uz.entity;
 
-import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.GeneralStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,6 +13,9 @@ import java.util.List;
 @Setter
 @Table(name = "profile")
 public class ProfileEntity {
+
+
+    // update profile set visible = true ->  false larni update qilamiz
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,9 +54,12 @@ public class ProfileEntity {
     @Column(name = "visible")
     private Boolean visible;
 
-    @Column(name = "created_date")
-    private LocalDateTime created_date;
+    @Column(name = "posts_count")
+    private Long postsCount;
 
-//    @OneToMany(mappedBy = "profileEntity ")
-//    private List<ProfileRoleEntity> roleList;
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @OneToMany(mappedBy = "profileEntity", fetch = FetchType.LAZY)
+    private List<ProfileRoleEntity> roleList;
 }

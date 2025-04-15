@@ -79,7 +79,7 @@ public class AuthService {
         profileEntity.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
         profileEntity.setStatus(GeneralStatus.IN_REGISTRATION);     // user is not fully registered
         profileEntity.setVisible(true);
-        profileEntity.setCreated_date(LocalDateTime.now());
+        profileEntity.setCreatedDate(LocalDateTime.now());
         // saved
         profileRepository.save(profileEntity);
         // user role is set up

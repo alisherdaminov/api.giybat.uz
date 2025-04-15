@@ -58,7 +58,7 @@ public class AttachService {
             attachEntity.setId(keyUUID + "." + extension);
             attachEntity.setPath(pathFolder);
             attachEntity.setExtension(extension);
-            attachEntity.setOrigenName(file.getOriginalFilename());
+            attachEntity.setOriginalName(file.getOriginalFilename());
             attachEntity.setSize(file.getSize());
             attachEntity.setVisible(true);
             attachRepository.save(attachEntity);
@@ -138,8 +138,8 @@ public class AttachService {
     // DB SAVE UCHUN
     public AttachDTO toDTO(AttachEntity attachEntity) {
         AttachDTO attachDTO = new AttachDTO();
-        attachDTO.setId(attachEntity.getId());
-        attachDTO.setOrigenName(attachEntity.getOrigenName());
+        attachDTO.setPhotoId(attachEntity.getId());
+        attachDTO.setOrigenName(attachEntity.getOriginalName());
         attachDTO.setExtension(attachEntity.getExtension());
         attachDTO.setSize(attachEntity.getSize());
         attachDTO.setUrl(openUrl(attachEntity.getId()));
@@ -151,7 +151,7 @@ public class AttachService {
     public AttachDTO attachDTO(String photoId) {
         if (photoId == null) return null;
         AttachDTO attachDTO = new AttachDTO();
-        attachDTO.setId(photoId);
+        attachDTO.setPhotoId(photoId);
         attachDTO.setUrl(openUrl(photoId));
         return attachDTO;
     }

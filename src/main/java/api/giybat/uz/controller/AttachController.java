@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/attach")
+@RequestMapping("/api/v1/attach")
 @Tag(name = "AttachController", description = "Api's for photos upload and download")
 public class AttachController {
 
