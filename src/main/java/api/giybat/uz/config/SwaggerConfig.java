@@ -24,15 +24,14 @@ public class SwaggerConfig {
                 .version("1.0.0")
                 .description("Quyida G'iybat.uz loyihasi uchun API hujjatlar tagdim qilingan.")
                 .contact(new Contact()
-                        .name("Bobur")
-                        .email("bigmangcom@gmail.com")
-                        .url("https://t.me/Jumaniyazov_Bobur")
-                )
-                .license(new License()
-                        .name("Videohub.uz")
-                        .url("https://videohub.uz/")
-                )
-                .termsOfService("Savol javob guruhi: https://t.me/code_uz_group");
+                        .name("Alisher")
+                        .email("alisherdaminov135@gmail.com")
+                );
+//                .license(new License()
+//                        .name("Videohub.uz")
+//                        .url("https://videohub.uz/")
+//                )
+               // .termsOfService("Savol javob guruhi: https://t.me/code_uz_group");
 
         // servers (ishlatiladigan serverlar)
         Server server1 = new Server()
