@@ -24,7 +24,7 @@ public class SpringSecurityUtil {
         return userDetails.getId();
     }
 
-    // for admin or user roles checking true or false response
+    // for admin or user roles checking true or false response.
     public static Boolean hasRole(ProfileRoleEnum requiredRole) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getAuthorities().stream().anyMatch(authority ->
