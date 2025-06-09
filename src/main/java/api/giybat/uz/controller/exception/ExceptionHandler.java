@@ -7,14 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.*;
 
 @ControllerAdvice
-public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
+public class ExceptionHandler extends ResponseEntityExceptionHandler {
     // This method is used to handle validation errors
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -32,14 +31,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     // 400 error
-    @ExceptionHandler(AppBadException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(AppBadException.class)
     public ResponseEntity<String> handle(AppBadException appBadException) {
         return ResponseEntity.badRequest().body(appBadException.getMessage());
     }
 
     // 500 error jonatish va controllerdan chiqb ketaolmaydi spring securitga
     // biz bilmaydigan xatoliklar uchun RuntimeExceptionni handle qilamiz
-    @ExceptionHandler(RuntimeException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handle(RuntimeException runtimeException) {
         runtimeException.printStackTrace();
         return ResponseEntity.internalServerError().body(runtimeException.getMessage());

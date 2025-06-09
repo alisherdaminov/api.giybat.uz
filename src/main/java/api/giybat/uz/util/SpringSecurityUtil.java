@@ -15,8 +15,7 @@ public class SpringSecurityUtil {
 
     public static CustomUserDetails getCurrentUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        return userDetails;
+        return (CustomUserDetails) authentication.getPrincipal();
     }
 
     public static Integer getCurrentUserId() {

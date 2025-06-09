@@ -18,13 +18,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/post")
-@Tag(name = "PostController", description = "Api's for creating new post")
-public class PostController {
+@Tag(name = "Post", description = "User creates a new post here!")
+public class Post {
 
     @Autowired
     private PostService postService;
 
-    @PostMapping("/api/v1/create")
+    @PostMapping("/create")
     public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostCreatedDTO dto) {
         return ResponseEntity.ok(postService.createPost(dto));
     }

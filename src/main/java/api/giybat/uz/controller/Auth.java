@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@Tag(name = "AuthController", description = "Api's for authorization and authentication")
+@Tag(name = "Auth", description = "User's authorization and authentication")
 @Slf4j
-public class AuthController {
+public class Auth {
 
     @Autowired
     private AuthService authService;

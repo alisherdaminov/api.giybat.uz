@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/profile")
-@Tag(name = "ProfileController", description = "Profile API's for user details update")
-public class ProfileController {
+@Tag(name = "Profile", description = "Operations related to user profile")
+public class Profile {
 
     @Autowired
     private ProfileService profileService;

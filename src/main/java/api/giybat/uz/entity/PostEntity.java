@@ -23,8 +23,6 @@ public class PostEntity {
     @Column(name = "content", columnDefinition = "text")
     private String content;
 
-    @Column(name = "photo_id")
-    private String photoId;//  photoId orqali update qilnadi postlar va rasmlar
 
     @Column(name = "profile_id", nullable = false)
     private Integer profileId;
@@ -33,6 +31,8 @@ public class PostEntity {
     @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     private ProfileEntity profileEntity;
 
+    @Column(name = "photo_id")
+    private String photoId;//  photoId orqali update qilnadi postlar va rasmlar
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_id", insertable = false, updatable = false)

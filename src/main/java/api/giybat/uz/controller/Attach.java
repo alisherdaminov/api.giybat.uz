@@ -11,8 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/attach")
-@Tag(name = "AttachController", description = "Api's for photos upload and download")
-public class AttachController {
+@Tag(name = "Attach", description = "Post's photos upload and download")
+public class Attach {
 
     @Autowired
     private AttachService attachService;
